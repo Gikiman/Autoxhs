@@ -4,11 +4,11 @@
     <img src="assets/Autoxhs.png" width="80%">
 </div>
 
-> Autoxsh is an open-source tool for generating and publishing content on Xiaohongshu (Little Red Book), leveraging OpenAI's API for automatic title, content, and tag creation.
+> Autoxsh is an open-source tool for generating and publishing content on Xiaohongshu (Little Red Book), leveraging OpenAI's API for automatic image, title, content, and tag creation.
 
 ## Features
 
-- **Automated Content Creation**: Utilizes OpenAI's API to generate engaging titles, content, and tags.
+- **Automated Content Creation**: Utilizes OpenAI's API to generate engaging images, titles, content, and tags.
 - **LangGPT Prompt Generation**: Employs the LangGPT project methodology for creating structured and high-quality ChatGPT prompts.
 - **Customizable**: Offers configuration options for prompt customization and model selection.
 - **Easy to Use**: Streamlit-based interface for a user-friendly experience.
