@@ -1,7 +1,5 @@
-# Autoxsh
-
 <div align="center">
-    <img src="assets/Autoxhs.png" width="80%">
+    <img src="assets/Autoxhs.png" width="90%">
 </div>
 
 > Autoxsh is an open-source tool for generating and publishing content on Xiaohongshu (Little Red Book), leveraging OpenAI's API for automatic image, title, content, and tag creation.
