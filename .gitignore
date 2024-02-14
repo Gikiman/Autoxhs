@@ -1,0 +1,13 @@
+# 忽略编译生成的文件
+*.pyc
+__pycache__/
+.DS_Store
+main.py
+openai_test.ipynb
+Untitled-2.ipynb
+data/prompt/prompt_image_v1.md
+data/prompt/prompt_image_v2.md
+videos/
+data/posts/
+test_img/
+config
