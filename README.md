@@ -6,25 +6,21 @@
 
 > Autoxsh is an open-source tool for generating and publishing content on Xiaohongshu (Little Red Book), leveraging OpenAI's API for automatic image, title, content, and tag creation.
 
+## Table of Contents
+
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Get Started](#get-started)
+- [Configuration](#configuration)
+- [Supporters](#supporters)
+  
 ## Features
 
 - **Automated Content Creation**: Utilizes OpenAI's API to generate engaging images, titles, content, and tags.
 - **LangGPT Prompt Generation**: Employs the LangGPT project methodology for creating structured and high-quality ChatGPT prompts.
 - **Customizable**: Offers configuration options for prompt customization and model selection.
 - **Easy to Use**: Streamlit-based interface for a user-friendly experience.
-
-## Table of Contents
-
-- [Autoxsh](#autoxsh)
-  - [Features](#features)
-  - [Table of Contents](#table-of-contents)
-  - [Demo](#demo)
-  - [Installation](#installation)
-  - [Get Started](#get-started)
-  - [Configuration](#configuration)
-    - [👏Supporters](#supporters)
-      - [↳ Stargazers](#-stargazers)
-      - [↳ Forkers](#-forkers)
   
 ## Demo
 A quick demonstration of Autoxsh in action (video accelerated for brevity):
@@ -69,8 +65,8 @@ streamlit run streamlit.py
 - Prompt Customization: Modify generation prompts in the `data\prompt` folder using the LangGPT methodology.
 - Model Selection: Default models are `gpt-4-0125-preview` for text and `dall-e-3` for images. These can be changed in `config\setting.py`.
 
-### 👏Supporters 
-#### &#8627; Stargazers
+## 👏Supporters 
+### &#8627; Stargazers
 [![Stargazers repo roster for @Gikiman/Autoxhs](https://reporoster.com/stars/dark/Gikiman/Autoxhs)](https://github.com//Gikiman/Autoxhs/stargazers)
-#### &#8627; Forkers
+### &#8627; Forkers
 [![Forkers repo roster for @Gikiman/Autoxhs](https://reporoster.com/forks/dark/Gikiman/Autoxhs)](https://github.com//Gikiman/Autoxhs/network/members)
