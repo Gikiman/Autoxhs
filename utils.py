@@ -6,7 +6,7 @@ import time
 
 def create_directory_for_post(save_path ="data/posts"):
     save_path = os.path.join(save_path,time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()))
-    os.mkdir(save_path)
+    os.makedirs(save_path,exist_ok = True)
     return save_path
 
 def save_post_to_file(post_data, directory):
