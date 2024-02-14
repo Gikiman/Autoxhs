@@ -39,6 +39,9 @@ conda create -n Autoxsh python=3.9
 # Activate the conda environment
 conda activate Autoxsh
 
+# Clone the Autoxsh repository to your local machine
+git clone https://github.com/Gikiman/Autoxhs.git
+
 # Navigate to the Autoxsh project directory
 cd Autoxhs
 
