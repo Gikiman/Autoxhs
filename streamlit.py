@@ -9,8 +9,9 @@ from content.content_generator import *
 from image.image_generator import get_image_openai
 from utils import *
 
-load_dotenv()
+load_dotenv(override=True)
 api_key = os.environ.get("OPENAI_API_KEY")
+
 st.set_page_config(
     page_title="Autoxhs",
     page_icon="📕",
