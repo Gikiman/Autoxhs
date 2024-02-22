@@ -66,5 +66,3 @@ streamlit run streamlit.py
 ## 👏Supporters 
 ### &#8627; Stargazers
 [![Stargazers repo roster for @Gikiman/Autoxhs](https://reporoster.com/stars/dark/Gikiman/Autoxhs)](https://github.com//Gikiman/Autoxhs/stargazers)
-### &#8627; Forkers
-[![Forkers repo roster for @Gikiman/Autoxhs](https://reporoster.com/forks/dark/Gikiman/Autoxhs)](https://github.com//Gikiman/Autoxhs/network/members)
