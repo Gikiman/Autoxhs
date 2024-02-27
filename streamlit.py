@@ -13,14 +13,21 @@ import sys
 
 load_dotenv(override=True)
 api_key = os.environ.get("OPENAI_API_KEY")
-
 # 尝试导入playwright，如果失败，则安装浏览器依赖
 try:
     from playwright.sync_api import sync_playwright
-except ImportError:
+    with sync_playwright() as playwright:
+        chromium = playwright.chromium
+        browser = chromium.launch(headless=True)
+except Exception as e: 
+    print(e)
     subprocess.check_call([sys.executable, "-m", "playwright", "install"])
+    subprocess.check_call([sys.executable, "-m", "playwright", "install-deps"])
     print("playwright已安装")
     from playwright.sync_api import sync_playwright
+    with sync_playwright() as playwright:
+        chromium = playwright.chromium
+        browser = chromium.launch(headless=True)
 
 st.set_page_config(
     page_title="Autoxhs",
