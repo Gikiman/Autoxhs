@@ -31,7 +31,8 @@ def sign(uri, data=None, a1="", web_session=""):
                     "x-s": encrypt_params["X-s"],
                     "x-t": str(encrypt_params["X-t"])
                 }
-        except Exception:
+        except Exception as e:
+            print(e)
             # 这儿有时会出现 window._webmsxyw is not a function 或未知跳转错误，因此加一个失败重试趴
             pass
     raise Exception("重试了这么多次还是无法签名成功，寄寄寄")

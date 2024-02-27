@@ -8,9 +8,18 @@ from api.openai_api import OpenAIClient
 from content.content_generator import *
 from image.image_generator import get_image_openai
 from utils import *
+import subprocess
+import sys
 
 load_dotenv(override=True)
 api_key = os.environ.get("OPENAI_API_KEY")
+
+# 尝试导入playwright，如果失败，则安装浏览器依赖
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "playwright", "install"])
+    from playwright.sync_api import sync_playwright
 
 st.set_page_config(
     page_title="Autoxhs",
