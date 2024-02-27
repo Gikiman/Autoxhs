@@ -19,6 +19,7 @@ try:
     from playwright.sync_api import sync_playwright
 except ImportError:
     subprocess.check_call([sys.executable, "-m", "playwright", "install"])
+    print("playwright已安装")
     from playwright.sync_api import sync_playwright
 
 st.set_page_config(
