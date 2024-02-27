@@ -22,7 +22,7 @@ try:
 except Exception as e: 
     print(e)
     subprocess.check_call([sys.executable, "-m", "playwright", "install"])
-    subprocess.check_call([sys.executable, "-m", "playwright", "install-deps"])
+    # subprocess.check_call([sys.executable, "-m", "playwright", "install-deps"])
     print("playwright已安装")
     from playwright.sync_api import sync_playwright
     with sync_playwright() as playwright:
