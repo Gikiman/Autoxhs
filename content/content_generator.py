@@ -70,6 +70,64 @@ def get_title_openai(client,args):
         })
     return result['标题列表'], messages
 
+def get_title_image_langchain(client,system_prompt,description):
+
+    tool_choice = {
+        "type":"function",
+        "function": {"name": "abstraction"}
+    }
+    
+    prompt = "多张图片描述：{}".format(description)
+    response = client.get_text(system_prompt,prompt,tool_choice)
+    abstraction = response['text'][0]['args']['故事概要']
+    
+    tool_choice = {
+    "type":"function",
+    "function": {"name": "titles"}
+    }
+    
+    prompt = "修改后的故事概要：{}".format(abstraction)
+    response = client.get_text(system_prompt,prompt,tool_choice)
+    
+    return response['text'][0]['args']['标题列表']
+
+def get_title_langchain(client,system_prompt,theme):
+
+
+    tool_choice = {
+        "type":"function",
+        "function": {"name": "titles"}
+    }
+    response = client.get_text(system_prompt,theme,tool_choice)
+    
+    return response['text'][0]['args']['标题列表']
+
+def get_content_from_title_langchain(client,system_prompt,title):
+
+    tool_choice = {
+        "type":"function",
+        "function": {"name": "xhs_creator"}
+    }
+    response = client.get_text(system_prompt,title,tool_choice)
+    result = response['text'][0]['args']
+
+    result['正文'] = remove_hash_and_asterisk(result['正文'])
+    
+    return result
+
+def get_content_from_suggestion_langchain(client,system_prompt,suggestion):
+
+    tool_choice = {
+        "type":"function",
+        "function": {"name": "xhs_creator"}
+    }
+    response = client.get_text(system_prompt,suggestion,tool_choice)
+    result = response['text'][0]['args']
+
+    result['正文'] = remove_hash_and_asterisk(result['正文'])
+    
+    return result
+
 def get_content_from_message_openai(client,args,messages):
 
     with open("data/tools.json", 'r') as file:

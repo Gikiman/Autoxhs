@@ -3,7 +3,8 @@ import os
 import re
 import os
 import time
-
+from openai import OpenAI
+import base64
 def create_directory_for_post(save_path ="data/posts"):
     save_path = os.path.join(save_path,time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()))
     os.makedirs(save_path,exist_ok = True)
@@ -38,8 +39,10 @@ def trans_into_md(note_data):
     # 构建Markdown字符串
     markdown_content = """
     <div align="center">{title}</div>
+    <hr>
     {description}
-    """.format(title=note_data["title"], description=note_data["description"])
+    {tags}
+    """.format(title=note_data["title"], description=note_data["description"], tags=note_data["topics"])
     
     return markdown_content
 
@@ -51,3 +54,19 @@ def trans_into_html(note_data):
     <p><b>主题标签：</b>{note_data["topics"]}</p>
     """
     return html_content
+
+def is_api_key_valid(api_key):
+    try:
+        response = OpenAI(api_key=api_key).chat.completions.create(
+            engine="davinci",
+            prompt="This is a test.",
+            max_tokens=5
+        )
+    except:
+        return False
+    else:
+        return True
+    
+def convert_to_base64(image_file):   
+    encoded_string = base64.b64encode(image_file.read()).decode()  
+    return encoded_string  

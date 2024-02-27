@@ -3,17 +3,17 @@
         "type": "function",
         "function": {
             "name": "titles",
-            "description": "\u8ba9\u7528\u6237\u4ece\u6807\u9898\u5217\u8868\u4e2d\u6311\u9009\u4e00\u4e2a\u5408\u9002\u7684\u6807\u9898",
+            "description": "让用户从标题列表中挑选一个合适的标题",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "\u6807\u9898\u5217\u8868": {
+                    "标题列表": {
                         "type": "string",
-                        "description": "\u6240\u9700\u683c\u5f0f\uff1a\u5143\u7d20\u4e3a\u5355\u4e2a\u6807\u9898\u7684python\u5217\u8868"
+                        "description": "所需格式：元素为单个标题的python列表"
                     }
                 },
                 "required": [
-                    "\u6807\u9898\u5217\u8868"
+                    "标题列表"
                 ]
             }
         }
@@ -22,14 +22,14 @@
         "type": "function",
         "function": {
             "name": "xhs_creator",
-            "description": "\u6839\u636e\u6807\u9898\uff0c\u6b63\u6587\uff0cTags\u7ec4\u6210\u5c0f\u7ea2\u4e66\u5b8c\u6574\u63a8\u6587",
+            "description": "根据标题，正文，Tags组成小红书完整推文",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "\u6807\u9898": {
+                    "标题": {
                         "type": "string"
                     },
-                    "\u6b63\u6587": {
+                    "正文": {
                         "type": "string"
                     },
                     "Tags": {
@@ -37,9 +37,27 @@
                     }
                 },
                 "required": [
-                    "\u6807\u9898",
-                    "\u6b63\u6587",
+                    "标题",
+                    "正文",
                     "Tags"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "abstraction",
+            "description": "根据故事概要，来判别小红书贴文的类别",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "故事概要": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "故事概要"
                 ]
             }
         }
