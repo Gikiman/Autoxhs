@@ -26,12 +26,12 @@
 Quick demonstrations of Autoxsh (videos accelerated for brevity):
 
 - **Theme-Based Post Generation**: Users simply input a topic, and Autoxsh automatically crafts a complete post, including both text content and matching images.
-    <div align="center">
-    <img src="assets/theme.gif" width="90%">
+<div align="center">
+        <img src="assets/theme.gif" width="90%">
 </div>
 
 - **Image-Based Post Generation**: Users can upload their own photos, and Autoxsh will generate rich and engaging post content based on these images.
-    <div align="center">
+<div align="center">
     <img src="assets/image.gif" width="90%">
 </div>
 
