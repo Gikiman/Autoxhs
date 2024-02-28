@@ -3,9 +3,9 @@
 </div>
 
 > Autoxsh is an open-source tool designed to streamline and automate the process of generating and publishing content on Xiaohongshu (Little Red Book). By leveraging the power of OpenAI's API, Autoxsh provides a comprehensive solution for creating engaging images, titles, content, and tags with ease. 
-> 
-> **Access the app deployed on Streamlit Cloud for a enjoyable experience:** [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://autoxhs.streamlit.app/)
-> 
+
+🚀 **Try Our App Live on Streamlit Cloud** [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://autoxhs.streamlit.app/)
+
 ## Table of Contents
 
 - [Features](#features)
