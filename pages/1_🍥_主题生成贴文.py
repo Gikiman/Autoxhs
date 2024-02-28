@@ -84,8 +84,6 @@ with st.sidebar:
                 print(json.dumps(check_qrcode["login_info"], indent=4))
                 print("当前 cookie：" + st.session_state.xhs_client.cookie)
                 break
-        # cookie = "a1=187d2defea8dz1fgwydnci40kw265ikh9fsxn66qs50000726043;gid=yYWfJfi820jSyYWfJfdidiKK0YfuyikEvfISMAM348TEJC28K23TxI888WJK84q8S4WfY2Sy;gid.sign=PSF1M3U6EBC/Jv6eGddPbmsWzLI=;webId=ba57f42593b9e55840a289fa0b755374;web_session=0400698f5e6dc956c9975704ed374b55e4658b"
-        # st.session_state.xhs_client = cookie_sign(cookie)
         st.session_state.user_logged_in = True
         st.rerun()
 
@@ -116,7 +114,6 @@ with st.sidebar:
             '贴文类别', 
             categoryList,
             key='category',
-            # on_change = create_system_prompt,
         )
 
 with col1:
