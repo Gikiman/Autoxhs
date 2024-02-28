@@ -2,33 +2,41 @@
     <img src="assets/Autoxhs.png" width="90%">
 </div>
 
-> Autoxsh is an open-source tool for generating and publishing content on Xiaohongshu (Little Red Book), leveraging OpenAI's API for automatic image, title, content, and tag creation.
-
+> Autoxsh is an open-source tool designed to streamline and automate the process of generating and publishing content on Xiaohongshu (Little Red Book). By leveraging the power of OpenAI's API, Autoxsh provides a comprehensive solution for creating engaging images, titles, content, and tags with ease. 
+> 
+> **Access the app deployed on Streamlit Cloud for a enjoyable experience:** [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://autoxhs.streamlit.app/)
+> 
 ## Table of Contents
 
 - [Features](#features)
 - [Demo](#demo)
-- [Installation](#installation)
-- [Get Started](#get-started)
+- [Getting Started](#getting-started)
 - [Configuration](#configuration)
 - [Supporters](#supporters)
   
 ## Features
 
-- **Automated Content Creation**: Utilizes OpenAI's API to generate engaging images, titles, content, and tags.
-- **LangGPT Prompt Generation**: Employs the LangGPT project methodology for creating structured and high-quality ChatGPT prompts.
-- **Customizable**: Offers configuration options for prompt customization and model selection.
-- **Easy to Use**: Streamlit-based interface for a user-friendly experience.
-  
-## Demo
-A quick demonstration of Autoxsh in action (video accelerated for brevity):
+- **Automated Content Creation**: Leverages OpenAI's API for generating engaging images, titles, content, and tags, streamlining content creation for Xiaohongshu.
+- **LangGPT Prompt Generation & Langchian Framework**: Utilizes the LangGPT project methodology and Langchian framework for creating structured, high-quality prompts and developing language model-powered applications.
+- **Customizable & User-Friendly**: Offers prompt customization and model selection options within a Streamlit-based interface, ensuring a user-friendly experience.
+- **Efficient Post Generation**:  Supports both topic and image-based post generation. Users can input a topic or upload photos, and Autoxsh automatically crafts a complete, engaging post, simplifying the content creation process.
 
-<div align="center">
-    <img src="assets/demo.gif">
+## Demo
+
+Quick demonstrations of Autoxsh (videos accelerated for brevity):
+
+- **Theme-Based Post Generation**: Users simply input a topic, and Autoxsh automatically crafts a complete post, including both text content and matching images.
+    <div align="center">
+    <img src="assets/theme.gif" width="90%">
 </div>
 
-## Installation
-To install Autoxsh, follow these steps:
+- **Image-Based Post Generation**: Users can upload their own photos, and Autoxsh will generate rich and engaging post content based on these images.
+    <div align="center">
+    <img src="assets/image.gif" width="90%">
+</div>
+
+## Getting Started
+1. To install Autoxsh, follow these steps:
 ```bash
 # Create a new conda environment with Python 3.9
 conda create -n Autoxsh python=3.9
@@ -44,25 +52,22 @@ cd Autoxhs
 
 # Install dependencies from requirements.txt
 pip install -r requirements.txt
+
+# If you are using a Linux system, you'll need to install the corresponding dependencies
+# xargs -a packages.txt sudo apt-get install -y
 ```
 
-## Get Started
+2. After installing, you can launch the application simply by running:
 
-After installing, you can start using Autoxsh by:
-1. Enter your OpenAI API key in the .env file:
 ```bash
-OPENAI_API_KEY=your_api_key_here
-```
-2. Launch the application with the following command:
-```bash
-streamlit run streamlit.py
+streamlit run Autoxhs.py
 ```
 > Note: A high-speed internet connection is required, and users in China should use a proxy.
 
 ## Configuration
 - Prompt Customization: Modify generation prompts in the `data\prompt` folder using the LangGPT methodology.
-- Model Selection: Default models are `gpt-4-0125-preview` for text and `dall-e-3` for images. These can be changed in `config\setting.py`.
+- Model Selection: Default models are `gpt-4-0125-preview` for text and `dall-e-3` for images. These can be selected in the app.
 
-## 👏Supporters 
-### &#8627; Stargazers
+### 👏Supporters 
+<!-- ### &#8627; Stargazers -->
 [![Stargazers repo roster for @Gikiman/Autoxhs](https://reporoster.com/stars/dark/Gikiman/Autoxhs)](https://github.com//Gikiman/Autoxhs/stargazers)
