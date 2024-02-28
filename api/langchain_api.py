@@ -84,6 +84,52 @@ def autoCategorize(human_input,text_model,api_key):
     
     return response['destination']
 
+def autoImageCategorize(image_description,text_model,api_key):
+    
+    llm = ChatOpenAI(model=text_model,openai_api_key=api_key)   
+    # 1.先根据图片描述得到一个简化的故事概要 
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            SystemMessage(
+                content="结合用户提供的一系列图片描述，创作一个连贯的故事概要，不超过100字。"
+            ),  # The persistent system prompt
+            HumanMessagePromptTemplate.from_template(
+                "{human_input}"
+            ),  # Where the human input will injected
+        ]
+    )
+
+
+    llm_chain = LLMChain(
+        llm=llm,
+        prompt=prompt,
+        verbose=True
+    )
+    response = llm_chain.invoke("多张图片描述：{}".format(image_description))
+    dump_abstraction = response['text']
+    
+    # 2.根据故事概要选择贴文类型
+    prompt_infos = categoryInfos
+    
+    llm = ChatOpenAI(model=text_model,api_key = api_key)
+    
+    destinations = [f"{p['name']}: {p['description']}" for p in prompt_infos]
+    destinations_str = "\n".join(destinations)
+    router_template = MULTI_PROMPT_ROUTER_TEMPLATE.format(
+        destinations=destinations_str
+    )
+    
+    router_prompt = PromptTemplate(
+        template=router_template,
+        input_variables=["input"],
+        output_parser=RouterOutputParser(),
+    )
+    router_chain = LLMRouterChain.from_llm(llm, router_prompt,verbose = True)
+
+    response = router_chain.invoke(dump_abstraction)
+    
+    return response['destination']
+
 def get_image_description(image_files,api_key,vision_model ="gpt-4-vision-preview"):
     image_message = {
             "type": "image_url",

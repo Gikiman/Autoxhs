@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from time import sleep
 from api.xhs_api import QRCode_sign_streamlit,cookie_sign
 from api.openai_api import OpenAIClient
-from api.langchain_api import LangChainClient,autoCategorize,get_image_description
+from api.langchain_api import LangChainClient,autoImageCategorize,get_image_description
 from content.content_generator import *
 from image.image_generator import get_image_langchain
 from utils import *
@@ -107,8 +107,8 @@ with st.sidebar:
         key='image_model'
     )
         
-    # categoryList = ["自动选择"]+list(categoryTranslations.keys())
-    categoryList = categoryTranslations.keys()
+    categoryList = ["自动选择"]+list(categoryTranslations.keys())
+    # categoryList = categoryTranslations.keys()
     category = st.selectbox(
             '贴文类别', 
             categoryList,
@@ -130,8 +130,19 @@ with col1:
                 description = get_image_description(st.session_state.images,st.session_state.openai_api_key)
                 print(description)
                 success = st.success("图片描述生成成功")
-                with open('data/prompt/image/{}.md'.format(categoryTranslations[st.session_state.category]), 'r', encoding='utf-8') as file:
-                    st.session_state.system_prompt = file.read() 
+
+                if st.session_state.category=="自动选择" :
+                    auto_selected_category = autoImageCategorize(description, st.session_state.text_model,st.session_state.openai_api_key)
+                    print("Auto selected category is " + auto_selected_category if auto_selected_category else "No category selected")
+                    if auto_selected_category in categoryTranslations.keys():
+                        with open('data/prompt/image/{}.md'.format(categoryTranslations[auto_selected_category]), 'r', encoding='utf-8') as file:
+                            st.session_state.system_prompt = file.read() 
+                    else:
+                        with open('data/prompt/image/{}.md'.format("Default"), 'r', encoding='utf-8') as file:
+                            st.session_state.system_prompt = file.read() 
+                else:
+                    with open('data/prompt/image/{}.md'.format(categoryTranslations[st.session_state.category]), 'r', encoding='utf-8') as file:
+                        st.session_state.system_prompt = file.read()
                 st.session_state.title_list = get_title_image_langchain(st.session_state.langchain_client, st.session_state.system_prompt,description)
                 success.empty()
             st.success('标题列表已更新，请选择您喜欢的标题。')
