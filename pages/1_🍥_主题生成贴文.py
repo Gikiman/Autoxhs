@@ -1,9 +1,10 @@
 import streamlit as st
 import datetime
+from xhs import DataFetchError
 from config.settings import text_models,image_models
 from dotenv import load_dotenv
 from time import sleep
-from api.xhs_api import QRCode_sign_streamlit,cookie_sign
+from api.xhs_api import QRCode_sign_streamlit,cookie_sign,create_client
 from api.openai_api import OpenAIClient
 from api.langchain_api import LangChainClient,autoCategorize
 from content.content_generator import *
@@ -28,6 +29,9 @@ if 'theme_input' not in st.session_state:
 if 'suggestion_input' not in st.session_state:
     st.session_state.suggestion_input = False    
 
+if 'submit_button_clicked' not in st.session_state:
+    st.session_state.submit_button_clicked = False
+
 if 'title_generate_clicked' not in st.session_state:
     st.session_state.title_generate_clicked = False  # 初始化点击状态
 
@@ -42,6 +46,13 @@ if 'title_list' not in st.session_state:
     
 if 'user_logged_in' not in st.session_state:
     st.session_state.user_logged_in = False
+
+if 'xhs_client' not in st.session_state:
+    st.session_state.xhs_client = create_client()  # 假定的初始化，根据你的实际情况调整
+
+def submit_button_callback():
+
+    st.session_state.submit_button_clicked = True
 
 with open("data/tools.json", 'r') as file:
     st.session_state.tools = json.load(file)
@@ -69,52 +80,91 @@ def create_langchain_client():
 with st.sidebar: 
   
     st.title('登陆小红书')
-    if st.session_state.user_logged_in:
-        st.success("欢迎回来！您已成功登录。")
-    else:
-        st.session_state.xhs_client, qr_img, qr_res = QRCode_sign_streamlit()
-        st.image(qr_img, caption='请扫描二维码完成登录',width =200)
-        qr_id = qr_res["qr_id"]
-        qr_code = qr_res["code"]
-        while True:
-            check_qrcode = st.session_state.xhs_client.check_qrcode(qr_id, qr_code)
-            print(check_qrcode)
-            sleep(1)
-            if check_qrcode["code_status"] == 2:
-                print(json.dumps(check_qrcode["login_info"], indent=4))
-                print("当前 cookie：" + st.session_state.xhs_client.cookie)
-                break
-        st.session_state.user_logged_in = True
-        st.rerun()
 
     
-    openai_api_key = st.text_input(
-        "OpenAI API Key", 
-        type="password", 
-        on_change=create_langchain_client,
-        key='openai_api_key'  # 使用key参数确保值被正确存储在session_state中
-    )
-    
-    text_model = st.selectbox(
-        'Text Model', 
-        text_models,
-        on_change=create_langchain_client,
-        key='text_model'
-    )
-    
-    image_model = st.selectbox(
-        'Image Model', 
-        image_models,
-        on_change=create_langchain_client,
-        key='image_model'
-    )
-        
-    categoryList = ["自动选择"]+list(categoryTranslations.keys())
-    category = st.selectbox(
-            '贴文类别', 
-            categoryList,
-            key='category',
+    if st.session_state.user_logged_in:
+        st.success("您已成功登录！")
+    else:
+        phone_tab, QR_tab = st.tabs(
+            [
+                "手机号登录",
+                "二维码登录",
+            ]
         )
+        with phone_tab:
+            with st.form(key='login_form'):
+                phone = st.text_input("请输入您的手机号码", key='phone')
+                submit_button = st.form_submit_button(label='发送验证码',on_click = submit_button_callback)
+                # 发送验证码
+                if submit_button:
+                    try:
+                        res = st.session_state.xhs_client.send_code(phone)
+                        st.success("验证码发送成功~")
+                    except DataFetchError as e:
+                        st.error(f"登录失败：{e}")
+            if submit_button or st.session_state.submit_button_clicked:
+
+                # 用户输入验证码
+                with st.form(key='verify_form'):
+                    code = st.text_input("请输入验证码", key='code')
+                    verify_button = st.form_submit_button(label='登录')
+
+                    if verify_button:
+                        # 检查验证码并登录
+                        try:
+                            check_res = st.session_state.xhs_client.check_code(phone, code)
+                            token = check_res["mobile_token"]
+                            login_res = st.session_state.xhs_client.login_code(phone, token)
+                            st.session_state.user_logged_in = True
+                            st.rerun()
+                        except DataFetchError as e:
+                            st.error(f"登录失败：{e}")
+                            
+        with QR_tab:            
+            if st.button("生成二维码"):
+                qr_img, qr_res = QRCode_sign_streamlit(st.session_state.xhs_client)
+                st.image(qr_img, caption='请扫码登录',width =200)
+                qr_id = qr_res["qr_id"]
+                qr_code = qr_res["code"]
+                code_status = 0
+                while code_status == 0:
+                    check_qrcode = st.session_state.xhs_client.check_qrcode(qr_id, qr_code)
+                    code_status = check_qrcode["code_status"]
+                    print(code_status)
+                    sleep(1)
+                    if code_status == 2:
+                        print(json.dumps(check_qrcode["login_info"], indent=4))
+                        print("当前 cookie：" + st.session_state.xhs_client.cookie)
+                st.session_state.user_logged_in = True
+                st.rerun()
+    if st.session_state.user_logged_in:
+        openai_api_key = st.text_input(
+            "OpenAI API Key", 
+            type="password", 
+            on_change=create_langchain_client,
+            key='openai_api_key'  # 使用key参数确保值被正确存储在session_state中
+        )
+        
+        text_model = st.selectbox(
+            'Text Model', 
+            text_models,
+            on_change=create_langchain_client,
+            key='text_model'
+        )
+        
+        image_model = st.selectbox(
+            'Image Model', 
+            image_models,
+            on_change=create_langchain_client,
+            key='image_model'
+        )
+            
+        categoryList = ["自动选择"]+list(categoryTranslations.keys())
+        category = st.selectbox(
+                '贴文类别', 
+                categoryList,
+                key='category',
+            )
 
 with col1:
     st.markdown("<h2 style='text-align: center; color: grey;'>📝 内容创作台</h2>", unsafe_allow_html=True)
