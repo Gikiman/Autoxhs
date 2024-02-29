@@ -127,14 +127,14 @@ with st.sidebar:
                 qr_id = qr_res["qr_id"]
                 qr_code = qr_res["code"]
                 code_status = 0
-                while code_status == 0:
+                while code_status != 2:
                     check_qrcode = st.session_state.xhs_client.check_qrcode(qr_id, qr_code)
                     code_status = check_qrcode["code_status"]
                     print(code_status)
                     sleep(1)
-                    if code_status == 2:
-                        print(json.dumps(check_qrcode["login_info"], indent=4))
-                        print("当前 cookie：" + st.session_state.xhs_client.cookie)
+                    # if code_status == 2:
+                    #     print(json.dumps(check_qrcode["login_info"], indent=4))
+                    #     print("当前 cookie：" + st.session_state.xhs_client.cookie)
                 st.session_state.user_logged_in = True
                 st.rerun()
     if st.session_state.user_logged_in:

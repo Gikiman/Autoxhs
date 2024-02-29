@@ -93,19 +93,6 @@ def QRCode_sign_streamlit(xhs_client):
     img.seek(0)  # 重置文件指针到开始
     return img, qr_res  # 返回二维码图片和相关信息
 
-def check_qrcode_status(xhs_client,qr_id, qr_code):
-    # 模拟检查二维码状态的函数，实际中应调用xhs_client的相关方法
-    print("进入到check_qrcode_status")
-    while True:
-        check_qrcode = xhs_client.check_qrcode(qr_id, qr_code)
-        print(check_qrcode)
-        sleep(1)
-        if check_qrcode["code_status"] == 2:
-            print(json.dumps(check_qrcode["login_info"], indent=4))
-            print("当前 cookie：" + xhs_client.cookie)
-            break
-    return check_qrcode
-
 def create_client():
     xhs_client = XhsClient(sign=sign)
     return xhs_client
