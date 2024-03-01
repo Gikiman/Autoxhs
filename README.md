@@ -68,8 +68,10 @@ streamlit run Autoxhs.py
 - Prompt Customization: Modify generation prompts in the `data\prompt` folder using the LangGPT methodology.
 - Model Selection: Default models are `gpt-4-0125-preview` for text and `dall-e-3` for images. These can be selected in the app.
 
-### 👏Supporters 
-<!-- ### &#8627; Stargazers -->
+## 👏Supporters 
+
+### &#8627; Stargazers
 [![Stargazers repo roster for @Gikiman/Autoxhs](https://reporoster.com/stars/dark/Gikiman/Autoxhs)](https://github.com//Gikiman/Autoxhs/stargazers)
 
+### &#8627; Forkers
 [![Forkers repo roster for @Gikiman/Autoxhs](https://reporoster.com/forks/dark/Gikiman/Autoxhs)](https://github.com/Gikiman/Autoxhs/network/members)
