@@ -232,7 +232,7 @@ with col1:
                 st.session_state.post = (content, st.session_state.images)
             st.success('贴文已更新，感谢您的反馈！')
     
-    if st.session_state.post: 
+    if st.session_state.post and len(st.session_state.images)!=0: 
         # note_data =  {
         #         "title": st.session_state.post[0]['标题'],
         #         "description": st.session_state.post[0]['正文'],
@@ -268,7 +268,7 @@ with col1:
     with st.container(border=True):
     # st.write("---")
         st.markdown("### 🚀 预览与发布",unsafe_allow_html=True)
-        if st.button("发布到小红书",disabled = not st.session_state.post):
+        if st.button("发布到小红书",disabled = (not st.session_state.post) or (len(st.session_state.openai_api_key)==0)):
             with st.spinner('请稍候，自动发布中...'):
                 post_content = {'标题': st.session_state.final_title, '正文': st.session_state.final_description, 'Tags': st.session_state.final_topics}
                 post_image = st.session_state.post[1]

@@ -22,9 +22,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 col1, col2 = st.columns([1,1]) 
-
-if 'theme_input' not in st.session_state:
-    st.session_state.theme_input = False
     
 if 'suggestion_input' not in st.session_state:
     st.session_state.suggestion_input = False    
@@ -72,7 +69,6 @@ def create_langchain_client():
         
     st.session_state.title_list = []  
     st.session_state.content = None 
-    st.session_state.theme_input = False
     st.session_state.suggestion_input = False 
     st.session_state.title_generate_clicked = False
     st.session_state.content_generate_clicked = False
@@ -81,7 +77,6 @@ with st.sidebar:
   
     st.title('登陆小红书')
 
-    
     if st.session_state.user_logged_in:
         st.success("您已成功登录！")
     else:
@@ -173,17 +168,15 @@ with col1:
     # 生成标题列表
     # st.write("---")
         st.markdown("### 🏷️ 标题生成", unsafe_allow_html=True)
-        theme = st.text_input('输入您的贴文主题：')
-        if theme:
-            st.session_state.theme_input = True
+        st.session_state.theme = st.text_input('输入您的贴文主题：')
 
-        if st.button("生成标题",disabled = not st.session_state.theme_input) and st.session_state.user_logged_in and st.session_state.theme_input:
+        if st.button("生成标题",disabled = len(st.session_state.theme)==0) and st.session_state.user_logged_in:
             with st.spinner('请稍候，标题生成中...'):
                 st.session_state.title_generate_clicked = True
                 st.session_state.langchain_client.cleam_memory(0)
             
                 if st.session_state.category=="自动选择" :
-                    auto_selected_category = autoCategorize(theme, st.session_state.text_model,st.session_state.openai_api_key)
+                    auto_selected_category = autoCategorize(st.session_state.theme, st.session_state.text_model,st.session_state.openai_api_key)
                     st.success('自动选择成功！类别为：{}'.format(auto_selected_category if auto_selected_category else "默认"))
                     print("Auto selected category is " + auto_selected_category if auto_selected_category else "No category selected")
                     if auto_selected_category in categoryTranslations.keys():
@@ -195,14 +188,14 @@ with col1:
                 else:
                     with open('data/prompt/theme/{}.md'.format(categoryTranslations[st.session_state.category]), 'r', encoding='utf-8') as file:
                         st.session_state.system_prompt = file.read() 
-                st.session_state.title_list = get_title_langchain(st.session_state.langchain_client, st.session_state.system_prompt,theme)
+                st.session_state.title_list = get_title_langchain(st.session_state.langchain_client, st.session_state.system_prompt,st.session_state.theme)
             st.success('标题列表已更新，请选择您喜欢的标题。')
             
     with st.container(border=True):
     # st.write("---")
         st.markdown("### ✍️ 贴文生成", unsafe_allow_html=True)
 
-        option= st.selectbox('选择一个标题开始创作：', st.session_state.title_list if st.session_state.theme_input else [])
+        option= st.selectbox('选择一个标题开始创作：', st.session_state.title_list if len(st.session_state.theme)!=0 else [])
         # if selected_option:
         #     st.session_state.selected_title = selected_option
         st.session_state.selected_title  = st.text_area(
@@ -243,7 +236,7 @@ with col1:
                 st.session_state.content = content
             st.success('贴文已更新，感谢您的反馈！')
     
-    if st.session_state.content: 
+    if st.session_state.content and len(st.session_state.theme)!=0: 
         # note_data =  {
         #         "title": st.session_state.content['标题'],
         #         "description": st.session_state.content['正文'],
@@ -275,7 +268,7 @@ with col1:
     with st.container(border=True):
     # st.write("---")
         st.markdown("### 🚀 预览与发布",unsafe_allow_html=True)
-        if st.button("发布到小红书",disabled = not st.session_state.content):
+        if st.button("发布到小红书",disabled = (not st.session_state.content) or (len(st.session_state.openai_api_key)==0)):
             with st.spinner('请稍候，自动发布中...'):
                 final_content = {'标题': st.session_state.final_title, '正文': st.session_state.final_description, 'Tags': st.session_state.final_topics}
                 topics = get_topics(st.session_state.xhs_client, final_content['Tags'])
