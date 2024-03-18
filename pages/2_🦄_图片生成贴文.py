@@ -179,6 +179,7 @@ with col1:
 
                 if st.session_state.category=="自动选择" :
                     auto_selected_category = autoImageCategorize(description, st.session_state.text_model,st.session_state.openai_api_key)
+                    st.success('自动选择成功！类别为：{}'.format(auto_selected_category if auto_selected_category else "默认"))
                     print("Auto selected category is " + auto_selected_category if auto_selected_category else "No category selected")
                     if auto_selected_category in categoryTranslations.keys():
                         with open('data/prompt/image/{}.md'.format(categoryTranslations[auto_selected_category]), 'r', encoding='utf-8') as file:
@@ -197,11 +198,14 @@ with col1:
     # st.write("---")
         st.markdown("### ✍️ 贴文生成", unsafe_allow_html=True)
 
-        selected_option = st.selectbox('选择一个标题开始创作：', st.session_state.title_list)
-        if selected_option:
-            st.session_state.selected_title = selected_option
-                
-        if st.button("生成贴文",disabled = not st.session_state.title_generate_clicked) and st.session_state.title_generate_clicked:
+        option= st.selectbox('选择一个标题开始创作：', st.session_state.title_list if len(st.session_state.images)!=0 else [])
+        # if selected_option:
+        #     st.session_state.selected_title = selected_option
+        st.session_state.selected_title  = st.text_area(
+            "可对标题进行修改",
+            option,disabled = not option
+            )
+        if st.button("生成贴文",disabled = not st.session_state.selected_title) and st.session_state.title_generate_clicked:
             with st.spinner('请稍候，自动生成中...'):
                 st.session_state.content_generate_clicked = True
                 st.session_state.langchain_client.cleam_memory(4)
@@ -229,12 +233,12 @@ with col1:
             st.success('贴文已更新，感谢您的反馈！')
     
     if st.session_state.post: 
-        note_data =  {
-                "title": st.session_state.post[0]['标题'],
-                "description": st.session_state.post[0]['正文'],
-                "topics": st.session_state.post[0]['Tags']
-            }          
-        note_md = trans_into_md(note_data)
+        # note_data =  {
+        #         "title": st.session_state.post[0]['标题'],
+        #         "description": st.session_state.post[0]['正文'],
+        #         "topics": st.session_state.post[0]['Tags']
+        #     }          
+        # note_md = trans_into_md(note_data)
         col2_1, col2_2,col2_3 = col2.columns([1,4,1])  
         with col2_2:
         # 将发布的贴文详情显示在主页面的右侧
@@ -245,15 +249,29 @@ with col1:
                 tabs = st.tabs(["图片{}".format(idx) for idx in range(1,len(st.session_state.post[1])+1)])
                 for idx,tab in enumerate(tabs):
                     tab.image(st.session_state.post[1][idx], use_column_width=True)
-                st.markdown(note_md, unsafe_allow_html=True)
+                # st.markdown(note_md, unsafe_allow_html=True)
+                title_tab, description_tab,topics_tab = st.tabs(
+                    [
+                        "标题修改",
+                        "正文修改",
+                        "Tags修改"
+                    ]
+                )
+                
+                with title_tab:
+                    st.session_state.final_title = st.text_area("None",st.session_state.post[0]['标题'],label_visibility = "collapsed")
+                with description_tab:
+                    st.session_state.final_description = st.text_area("None",st.session_state.post[0]['正文'],label_visibility = "collapsed",height=600)  
+                with topics_tab:                
+                    st.session_state.final_topics = st.text_area("None",st.session_state.post[0]['Tags'],label_visibility = "collapsed")
                 
     with st.container(border=True):
     # st.write("---")
         st.markdown("### 🚀 预览与发布",unsafe_allow_html=True)
         if st.button("发布到小红书",disabled = not st.session_state.post):
             with st.spinner('请稍候，自动发布中...'):
-                post = deepcopy(st.session_state.post)
-                post_content,post_image = post
+                post_content = {'标题': st.session_state.final_title, '正文': st.session_state.final_description, 'Tags': st.session_state.final_topics}
+                post_image = st.session_state.post[1]
                 topics = get_topics(st.session_state.xhs_client, post_content['Tags'])
                 topics_suffix = get_topics_suffix(topics)
                 post_content['正文'] = post_content['正文'] + topics_suffix
