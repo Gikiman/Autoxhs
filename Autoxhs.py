@@ -1,21 +1,8 @@
 import streamlit as st
-import subprocess
-import sys
+from utils import playwright_install
 
-try:
-    from playwright.sync_api import sync_playwright
-    with sync_playwright() as playwright:
-        chromium = playwright.chromium
-        browser = chromium.launch(headless=True)
-except Exception as e: 
-    print(e)
-    subprocess.check_call([sys.executable, "-m", "playwright", "install"])
-    print("playwright已安装")
-    from playwright.sync_api import sync_playwright
-    with sync_playwright() as playwright:
-        chromium = playwright.chromium
-        browser = chromium.launch(headless=True)
-        
+playwright_install()
+
 st.set_page_config(
     page_title="Autoxhs",
     page_icon="📛",

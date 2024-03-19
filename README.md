@@ -2,7 +2,7 @@
     <img src="assets/Autoxhs.png" width="90%">
 </div>
 
-> Autoxsh is an open-source tool designed to streamline and automate the process of generating and publishing content on Xiaohongshu (Little Red Book). By leveraging the power of OpenAI's API, Autoxsh provides a comprehensive solution for creating engaging images, titles, content, and tags with ease. 
+> Autoxhs is an open-source tool designed to streamline and automate the process of generating and publishing content on Xiaohongshu (Little Red Book). By leveraging the power of OpenAI's API, Autoxhs provides a comprehensive solution for creating engaging images, titles, content, and tags with ease. 
 
 🚀 **Try Our App Live on Streamlit Cloud** [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://autoxhs.streamlit.app/)
 
@@ -19,35 +19,35 @@
 - **Automated Content Creation**: Leverages OpenAI's API for generating engaging images, titles, content, and tags, streamlining content creation for Xiaohongshu.
 - **LangGPT Prompt Generation & Langchian Framework**: Utilizes the LangGPT project methodology and Langchian framework for creating structured, high-quality prompts and developing language model-powered applications.
 - **Customizable & User-Friendly**: Offers prompt customization and model selection options within a Streamlit-based interface, ensuring a user-friendly experience.
-- **Efficient Post Generation**:  Supports both topic and image-based post generation. Users can input a topic or upload photos, and Autoxsh automatically crafts a complete, engaging post, simplifying the content creation process.
+- **Efficient Post Generation**:  Supports both topic and image-based post generation. Users can input a topic or upload photos, and Autoxhs automatically crafts a complete, engaging post, simplifying the content creation process.
 
 ## Demo
 
-Quick demonstrations of Autoxsh (videos accelerated for brevity):
+Quick demonstrations of Autoxhs (videos accelerated for brevity):
 
-- **Theme-Based Post Generation**: Users simply input a topic, and Autoxsh automatically crafts a complete post, including both text content and matching images.
+- **Theme-Based Post Generation**: Users simply input a topic, and Autoxhs automatically crafts a complete post, including both text content and matching images.
 <div align="center">
         <img src="assets/theme.gif" width="90%">
 </div>
 
-- **Image-Based Post Generation**: Users can upload their own photos, and Autoxsh will generate rich and engaging post content based on these images.
+- **Image-Based Post Generation**: Users can upload their own photos, and Autoxhs will generate rich and engaging post content based on these images.
 <div align="center">
     <img src="assets/image.gif" width="90%">
 </div>
 
 ## Getting Started
-1. To install Autoxsh, follow these steps:
+1. To install Autoxhs, follow these steps:
 ```bash
 # Create a new conda environment with Python 3.9
-conda create -n Autoxsh python=3.9
+conda create -n Autoxhs python=3.9
 
 # Activate the conda environment
-conda activate Autoxsh
+conda activate Autoxhs
 
-# Clone the Autoxsh repository to your local machine
+# Clone the Autoxhs repository to your local machine
 git clone https://github.com/Gikiman/Autoxhs.git
 
-# Navigate to the Autoxsh project directory
+# Navigate to the Autoxhs project directory
 cd Autoxhs
 
 # Install dependencies from requirements.txt

@@ -51,7 +51,7 @@ def submit_button_callback():
 
     st.session_state.submit_button_clicked = True
 
-with open("data/tools.json", 'r') as file:
+with open("data/tools.json", 'rb') as file:
     st.session_state.tools = json.load(file)
 
 def create_langchain_client():
@@ -167,7 +167,7 @@ with col1:
     
     with st.container(border=True):
         st.markdown("### 🏷️ 上传图片", unsafe_allow_html=True)
-        st.session_state.images = st.file_uploader("可选择多张图片", accept_multiple_files=True)
+        st.session_state.images = st.file_uploader("可选择多张图片", accept_multiple_files=True,disabled = not st.session_state.user_logged_in )
 
         if st.button("生成标题",disabled = len(st.session_state.images)==0) and st.session_state.user_logged_in:
             with st.spinner('请稍候，标题生成中...'):

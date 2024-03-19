@@ -5,6 +5,11 @@ import os
 import time
 from openai import OpenAI
 import base64
+import subprocess
+import sys
+import platform
+import asyncio
+
 def create_directory_for_post(save_path ="data/posts"):
     save_path = os.path.join(save_path,time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()))
     os.makedirs(save_path,exist_ok = True)
@@ -70,3 +75,37 @@ def is_api_key_valid(api_key):
 def convert_to_base64(image_file):   
     encoded_string = base64.b64encode(image_file.read()).decode()  
     return encoded_string  
+
+def playwright_install():
+        
+    if platform.system().lower() == 'windows':
+        async def test_playwright():
+            from playwright.async_api import async_playwright
+            async with async_playwright() as playwright:
+                chromium = playwright.chromium
+                browser = await chromium.launch(headless=True)
+        try:
+            loop = asyncio.ProactorEventLoop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(test_playwright())
+        except Exception as e: 
+            print(e)
+            subprocess.call(["playwright", "install"])
+            print("playwright已安装")
+            loop = asyncio.ProactorEventLoop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(test_playwright())
+    else:
+        try:
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as playwright:
+                chromium = playwright.chromium
+                browser = chromium.launch(headless=True)
+        except Exception as e: 
+            print(e)
+            subprocess.check_call([sys.executable, "-m", "playwright", "install"])
+            print("playwright已安装")
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as playwright:
+                chromium = playwright.chromium
+                browser = chromium.launch(headless=True)

@@ -51,7 +51,7 @@ def submit_button_callback():
 
     st.session_state.submit_button_clicked = True
 
-with open("data/tools.json", 'r') as file:
+with open("data/tools.json", 'rb') as file:
     st.session_state.tools = json.load(file)
 
 def create_langchain_client():
@@ -168,7 +168,7 @@ with col1:
     # 生成标题列表
     # st.write("---")
         st.markdown("### 🏷️ 标题生成", unsafe_allow_html=True)
-        st.session_state.theme = st.text_input('输入您的贴文主题：')
+        st.session_state.theme = st.text_input('输入您的贴文主题：',disabled = not st.session_state.user_logged_in)
 
         if st.button("生成标题",disabled = len(st.session_state.theme)==0) and st.session_state.user_logged_in:
             with st.spinner('请稍候，标题生成中...'):
@@ -251,18 +251,18 @@ with col1:
                 for image_path in st.session_state.images:
                     st.image(image_path, use_column_width=True)
                 # st.markdown(note_md, unsafe_allow_html=True)
-                title_tab, description_tab,topics_tab = st.tabs(
+                description_tab,title_tab,topics_tab = st.tabs(
                     [
-                        "标题修改",
                         "正文修改",
+                        "标题修改",
                         "Tags修改"
                     ]
                 )
                 
-                with title_tab:
-                    st.session_state.final_title = st.text_area("None",st.session_state.content['标题'],label_visibility = "collapsed")
                 with description_tab:
                     st.session_state.final_description = st.text_area("None",st.session_state.content['正文'],label_visibility = "collapsed",height=600)  
+                with title_tab:
+                    st.session_state.final_title = st.text_area("None",st.session_state.content['标题'],label_visibility = "collapsed")
                 with topics_tab:                
                     st.session_state.final_topics = st.text_area("None",st.session_state.content['Tags'],label_visibility = "collapsed")
     with st.container(border=True):
