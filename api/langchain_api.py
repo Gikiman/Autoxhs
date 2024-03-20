@@ -11,7 +11,7 @@ from langchain.chains.router.multi_prompt_prompt import MULTI_PROMPT_ROUTER_TEMP
 from config.category import categoryInfos
 from utils import convert_to_base64
 import json
-
+import asyncio
 class LangChainClient:
     def __init__(self, api_key,image_model = "dall-e-3" ,text_model="gpt-4-0125-preview", tools=None):
         self.api_key = api_key
@@ -130,7 +130,11 @@ def autoImageCategorize(image_description,text_model,api_key):
     
     return response['destination']
 
+async def my_function(descriptor,images):
+    return await descriptor.abatch(images)
+
 def get_image_description(image_files,api_key,vision_model ="gpt-4-vision-preview"):
+
     image_message = {
             "type": "image_url",
             "image_url": {
@@ -142,22 +146,26 @@ def get_image_description(image_files,api_key,vision_model ="gpt-4-vision-previe
     descripton_prompt = ChatPromptTemplate.from_messages([
         ("user", messages)
     ])
+    
     llm = ChatOpenAI(
     openai_api_key=api_key,
     model=vision_model,
     max_tokens=300)
-    chain = descripton_prompt | llm
-    descriptor = RunnableParallel(basic = chain)
-    
+
+    descriptor = LLMChain(
+        llm=llm,
+        prompt=descripton_prompt,
+    )
     images =[]
     for image_file in image_files:
         images.append({"base64image":convert_to_base64(image_file)})
-    responses = descriptor.batch(images)
+    responses =  asyncio.run(my_function(descriptor, images))
     
     descriptions = ""
     for index,response in enumerate(responses, start=1):
         if index == len(responses):
-            descriptions += f"{str(index)}. {str(response['basic'].content)} "
+            descriptions += f"{str(index)}. {str(response['text'])} "
         else:
-            descriptions += f"{str(index)}. {str(response['basic'].content)} \n"
+            descriptions += f"{str(index)}. {str(response['text'])} \n"
+
     return descriptions
